@@ -1,4 +1,5 @@
 import conlp
+from typing import TypedDict
 import sys
 import tweepy
 import datetime
@@ -34,6 +35,10 @@ includes = [{media1}, {media2}, ...] (see media_include and poll_include)
 referred = [{type: , tweet_id: }, {type: , tweet_id}, ...]
 )
 """
+class SAVE_TO_FILE(TypedDict):
+    name: str
+    format: str  
+    
 class plotlyWidget: 
     def __init__(self): 
         pass
@@ -145,11 +150,12 @@ class plotlyWidget:
 class tweepy_v2_StreamingClient(tweepy.StreamingClient):
     
     def __init__(self, 
-                 bearer_token, 
-                 hashtag_exception, 
-                 senti, keyword, 
-                 senti_analyze, 
-                 keyword_extract, 
+                 bearer_token:str, 
+                 hashtag_exception:list, 
+                 sentiment, 
+                 keyword, 
+                 extract_sentiment, 
+                 extract_keyword, 
                  rate_limit, 
                  save_to_file, 
                  display_widget, 
@@ -159,17 +165,17 @@ class tweepy_v2_StreamingClient(tweepy.StreamingClient):
         self.client = tweepy.Client(bearer_token=bearer_token)
         
         self.hashtag_exception = hashtag_exception 
-        self.senti_analyze = senti_analyze
-        self.keyword_extract = keyword_extract 
-        if self.senti_analyze is True: 
-            self.senti = senti
+        self.extract_sentiment = extract_sentiment
+        self.extract_keyword = extract_keyword 
+        if self.extract_sentiment is True: 
+            self.sentiment = sentiment
         else: 
             pass
-        if self.keyword_extract is True: 
+        if self.extract_keyword is True: 
             self.keyword = keyword
         else: 
             pass 
-        self.preprocess = nlp.preprocess
+        self.preprocess = conlp.preprocess
         
         self.num_rate = 0
         self.rate_limit = rate_limit
@@ -275,15 +281,19 @@ class tweepy_v2_StreamingClient(tweepy.StreamingClient):
             pickle.dump(pseudoJson, open('{}.pkl'.format(self.filename), 'wb'))
             
     def on_errors(self): 
+        # TODO document why this method is empty
         pass
     
     def on_connection_error(self): 
+        # TODO document why this method is empty
         pass
     
     def on_exception(self): 
+        # TODO document why this method is empty
         pass
     
     def on_request_error(self): 
+        # TODO document why this method is empty
         pass 
     
     def on_connect(self):
@@ -328,16 +338,21 @@ class tweepy_v2_StreamingClient(tweepy.StreamingClient):
     def on_response(self, response):
         df_list = [[], [], [], []]
         labels = []
+        # TODO: `tweet_per_minute` allowing users to control collection speed. 12 tweets per min highly recommended, due to the API rate limit 
+        time.sleep(5)
         tweet = response.data
         #Author
         author = self.client.get_user(id=tweet['author_id'], 
                                  user_fields = ['description', 'name', 'profile_image_url', 'public_metrics', 'verified'])
-        author_idx = author.data 
+        author_idx = author.data
         
-        author_id = author_idx.id
-        author_name = author_idx.name
-        author_description = author_idx.description
-        author_followers = author_idx.public_metrics['followers_count']
+        if author_idx is None: 
+            author_id, author_name, author_description, author_followers = None, None, None, None 
+        else: 
+            author_id = author_idx.id
+            author_name = author_idx.name
+            author_description = author_idx.description
+            author_followers = author_idx.public_metrics['followers_count']
         
         df_list[0].append(author_id)
         df_list[0].append(author_name)
@@ -347,7 +362,7 @@ class tweepy_v2_StreamingClient(tweepy.StreamingClient):
         #Tweet
         tweet_id = tweet['id']
         tweet_created = tweet['created_at']
-#         tweet_created = tweet['created_at'].strftime("%Y-%m-%d %H:%M:%S")
+        #tweet_created = tweet['created_at'].strftime("%Y-%m-%d %H:%M:%S")
         tweet_text = tweet['text']
         
         df_list[1].append(tweet_id)
@@ -421,15 +436,15 @@ class tweepy_v2_StreamingClient(tweepy.StreamingClient):
         processed_text = self.preprocess.tweets(tweet_text, remove_hashtag=True, hashtag_exception=self.hashtag_exception)
         df_list[3].append(processed_text)
         
-        if self.keyword_extract is True: 
+        if self.extract_keyword is True: 
             unigram_extract = self.keyword.keyBERT(processed_text, text_type='tweets', preprocess_exception=self.hashtag_exception)
             bigram_extract = self.keyword.keyBERT(processed_text, text_type='tweets', preprocess_exception=self.hashtag_exception, ngram=2)
             keyword_extract = {'unigram': unigram_extract, 'bigram': bigram_extract}
             df_list[3].append(keyword_extract)
         else: 
             df_list[3].append(None)
-        if self.senti_analyze is True: 
-            sentiments = self.senti.aggregate(processed_text, text_type='tweets')
+        if self.extract_sentiment is True: 
+            sentiments = self.sentiment.aggregate(processed_text, text_type='tweets')
             df_list[3].append(sentiments)
         else: 
             df_list[3].append(None)
@@ -539,17 +554,16 @@ class tweepy_v2_StreamingClient(tweepy.StreamingClient):
                     dashboard_total[-2] = np.mean(self.SENTI_dict[PREV_HMstrft]['total'])
                     self.dashboard.data[0].y = dashboard_total
             
-            query = 'bitcoin (context:166.1301195966125494272 OR context:174.1007360414114435072) -nft -"follow me" -follow -"visit us" -like -"like and retweet" -"like and rt" -tag -giveaway -"giving away" -free -"comment your wallet" -"comment your BTC address" -"comment your ETH address" -telegram -"give $" -"win $" -"give USD" -"win USD" -airdrop -"air-drop" -ico -"play at" -"join me" -"make money online" -"making money online" -"zero experience needed" -"with the help" lang:en'
             #Volume 
             if 0 <= NOW.second and NOW.second <= 10: 
                 start = datetime.datetime.strptime((NOW - (datetime.timedelta(minutes=1)+datetime.timedelta(seconds=NOW.second))).strftime("%Y-%m-%dT%H:%M:%S"), "%Y-%m-%dT%H:%M:%S")
                 end = datetime.datetime.strptime((NOW - datetime.timedelta(seconds=10)).strftime("%Y-%m-%dT%H:%M:%S"), "%Y-%m-%dT%H:%M:%S")
-                current_VOLUME = self.client.get_recent_tweets_count(query, start_time=start, end_time=end).data[0]['tweet_count']
+                current_VOLUME = self.client.get_recent_tweets_count(self.query, start_time=start, end_time=end).data[0]['tweet_count']
                 self.past_VOLUME = current_VOLUME 
             elif 10 < NOW.second and NOW.second <= 59: 
                 start = datetime.datetime.strptime((NOW - datetime.timedelta(seconds=NOW.second)).strftime("%Y-%m-%dT%H:%M:%S"), "%Y-%m-%dT%H:%M:%S")
                 end = datetime.datetime.strptime((NOW - datetime.timedelta(seconds=10)).strftime("%Y-%m-%dT%H:%M:%S"), "%Y-%m-%dT%H:%M:%S")
-                current_VOLUME = self.client.get_recent_tweets_count(query, start_time=start, end_time=end).data[0]['tweet_count']
+                current_VOLUME = self.client.get_recent_tweets_count(self.query, start_time=start, end_time=end).data[0]['tweet_count']
                 self.past_VOLUME = current_VOLUME
             
 #             if start in self.VOLUME_dict.keys(): 
@@ -627,14 +641,14 @@ class tweepy_v2_StreamingClient(tweepy.StreamingClient):
         self.num_rate += 1 
         
         if self.rate_limit is None: 
-            print("collecting tweet_{}".format(tweet_id))
+            print("{}: collecting tweet_{}".format(self.num_rate, tweet_id))
             if self.fileformat.lower() == 'csv':
                 return self.to_csv(df_list)
             elif self.fileformat.lower() == 'json':
                 return self.to_json(df_list)
         else: 
             if self.num_rate <= self.rate_limit: 
-                print("collecting tweet_{}".format(tweet_id))
+                print("{}: collecting tweet_{}".format(self.num_rate, tweet_id))
                 if self.fileformat.lower() == 'csv': 
                     return self.to_csv(df_list)
                 elif self.fileformat.lower() == 'json': 
@@ -645,24 +659,24 @@ class tweepy_v2_StreamingClient(tweepy.StreamingClient):
 
 class twitter: 
     def __init__(self, 
-                 bearer_token, 
-                 hashtag_exception=None, 
-                 senti_analyze=True, 
-                 keyword_extract=True, 
-                 display_widget=False): 
+                 bearer_token:str, 
+                 hashtag_exception:list or None=None, 
+                 extract_sentiment:bool=True, 
+                 extract_keyword:bool=True, 
+                 display_widget:bool=False): 
         
         self.bearer_token = bearer_token 
         self.hashtag_exception = hashtag_exception
-        self.senti_analyze = senti_analyze
-        self.keyword_extract = keyword_extract
+        self.extract_sentiment = extract_sentiment
+        self.extract_keyword = extract_keyword
         self.display_widget = display_widget 
 
-        if self.senti_analyze is True: 
-            self.senti = nlp.sentiment(load_models='all')            
+        if self.extract_sentiment is True: 
+            self.sentiment = conlp.sentiment(load_models='all')            
         else: 
-            self.senti = None
-        if self.keyword_extract is True: 
-            self.keyword = nlp.keyword_extraction(load_models='keyBERT')
+            self.sentiment = None
+        if self.extract_keyword is True: 
+            self.keyword = conlp.keyword(load_models='keyBERT')
         else: 
             self.keyword = None 
         
@@ -671,25 +685,37 @@ class twitter:
             self.dashboard = self.widget.dashboard()
         else: 
             self.dashboard = None 
+        
+        self.query = None
     
     def stream(self, 
-               query, 
-               rate_limit,
-               save_to_file={'name': 'test', 'format': 'csv'}, 
-               sample=False): 
+               query:str, 
+               rate_limit:int,
+               save_to_file:SAVE_TO_FILE={'name': 'test', 'format': 'csv'}, 
+               sample:bool=False): 
         
         streamer = tweepy_v2_StreamingClient(bearer_token=self.bearer_token, 
                                              hashtag_exception=self.hashtag_exception,
-                                             senti_analyze=self.senti_analyze,
-                                             keyword_extract=self.keyword_extract,
-                                             senti=self.senti, 
+                                             extract_sentiment=self.extract_sentiment,
+                                             extract_keyword=self.extract_keyword,
+                                             sentiment=self.sentiment, 
                                              keyword=self.keyword, 
                                              rate_limit=rate_limit, 
                                              save_to_file=save_to_file,
-                                            display_widget=self.display_widget, 
-                                            dashboard=self.dashboard)
+                                             display_widget=self.display_widget, 
+                                             dashboard=self.dashboard)
         
-        streamer.add_rules(tweepy.StreamRule(query))
+        if streamer.get_rules().data is None: 
+            self.query = query 
+            streamer.add_rules(tweepy.StreamRule(self.query))
+            print("Rules: ", streamer.get_rules().data)
+        else: 
+            StreamRules = streamer.get_rules().data
+            Rules = [str(Rule.id) for Rule in StreamRules]
+            streamer.delete_rules(ids=Rules)
+            self.query = query 
+            streamer.add_rules(tweepy.StreamRule(self.query))
+            print("Rules: ", streamer.get_rules().data)
         
         if sample is False: 
             streamer.filter(expansions=["attachments.poll_ids", "attachments.media_keys"],
