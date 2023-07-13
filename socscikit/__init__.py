@@ -1,1 +1,1 @@
-from socscikit import socialmedia
+from socscikit import CompliSent

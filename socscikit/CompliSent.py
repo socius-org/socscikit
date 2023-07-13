@@ -1,7 +1,13 @@
 import pickle 
+import os 
 
-
-with open('CompliSent/lexicon_dictionary/MASTER/MASTER_v2022.pickle', 'rb') as handle: 
-    MASTER_v2022 = pickle.load(handle)
-
-print(MASTER_v2022)
+class lexicon:
+    def __init__(self): 
+        self.directory = os.getcwd()
+    
+    def dictionary(self, idx:str):
+        if idx == 'MASTER_v2022':              
+            with open('CompliSent/lexicon_dictionary/MASTER/MASTER_v2022.pickle', 'rb') as handle: 
+                lex_dict = pickle.load(handle)
+        
+        return lex_dict
