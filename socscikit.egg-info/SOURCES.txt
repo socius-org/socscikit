@@ -3,7 +3,7 @@ README.md
 setup.cfg
 setup.py
 socscikit/CompliSent.py
-socscikit/init.py
+socscikit/__init__.py
 socscikit/socialmedia.py
 socscikit.egg-info/PKG-INFO
 socscikit.egg-info/SOURCES.txt

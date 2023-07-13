@@ -1,8 +1,9 @@
-from init import * 
+import os 
+import pickle 
 
 class lexicon:
     def __init__(self): 
-        self.script_dir = SCRIPT_DIRECTORY
+        self.script_dir = os.path.dirname(os.path.abspath(__file__))
     
     def dictionary(self, idx:str):
         
@@ -12,6 +13,3 @@ class lexicon:
                 lex_dict = pickle.load(handle)
         
         return lex_dict
-
-lexicon = lexicon()
-print(lexicon.dictionary("MASTER_v2022"))
