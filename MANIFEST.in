@@ -1,2 +1,2 @@
 recursive-include socscikit/lexicon_dictionary/MASTER MASTER_v2022.pickle MASTER_v2022.csv
-recursive-include socscikit/lexicon_dictionary/VADER VADER.pickle VADER.csv
+recursive-include socscikit/lexicon_dictionary/VADER VADER_v2014_mod.pickle VADER.csv
