@@ -12,4 +12,9 @@ class lexicon:
             with open(file_path, 'rb') as handle: 
                 lex_dict = pickle.load(handle)
         
+        elif idx == "VADER": 
+            file_path = os.path.join(self.script_dir, 'lexicon_dictionary', 'VADER', 'VADER.pickle')
+            with open(file_path, 'rb') as handle: 
+                lex_dict = pickle.load(handle)
+                
         return lex_dict
