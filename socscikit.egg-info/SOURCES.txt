@@ -13,3 +13,5 @@ socscikit.egg-info/requires.txt
 socscikit.egg-info/top_level.txt
 socscikit/lexicon_dictionary/MASTER/MASTER_v2022.csv
 socscikit/lexicon_dictionary/MASTER/MASTER_v2022.pickle
+socscikit/lexicon_dictionary/VADER/VADER.csv
+socscikit/lexicon_dictionary/VADER/VADER.pickle
