@@ -1,1 +1,1 @@
-include socscikit/lexicon_dictionary
+recursive-include socscikit/lexicon_dictionary/MASTER MASTER_v2022.pickle MASTER_v2022.csv
