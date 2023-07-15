@@ -1,9 +1,9 @@
 from rich.progress import track
 from rich import print as pprint
 import itertools
-from itertools import combinations
+from itertools import combinations, chain
 import statistics
-from collections import defaultdict, Counter
+from collections import Counter
 import spacy
 
 
