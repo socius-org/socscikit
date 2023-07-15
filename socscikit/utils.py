@@ -200,8 +200,8 @@ class CS:
                 general_dict["miscellaneous"] += value
 
         part_of_speech = {
-            "general": sort_dict(general_dict),
-            "granular": sort_dict(granular_dict),
+            "general": self.sort_dict(general_dict),
+            "granular": self.sort_dict(granular_dict),
             "misc": misc,
         }
 
