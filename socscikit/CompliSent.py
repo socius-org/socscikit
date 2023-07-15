@@ -23,4 +23,4 @@ class lexicon:
     
     def overview(self, dictionary:dict): 
         #dict:str = Consider if users simply come up with the lex_dict_idx
-        return CS.summarise_lex_dict(dictionary)
+        return CS().summarise_lex_dict(dictionary)

@@ -6,6 +6,7 @@ setup.py
 socscikit/CompliSent.py
 socscikit/__init__.py
 socscikit/socialmedia.py
+socscikit/test.py
 socscikit/utils.py
 socscikit.egg-info/PKG-INFO
 socscikit.egg-info/SOURCES.txt
