@@ -20,6 +20,7 @@ class CS:
         for sublist in track(
             dictionary.values(),
             description="Computing Summary Statistics of Sentiment Scores",
+            transient=True
         ):
             if isinstance(sublist, list):
                 if all(isinstance(item, str) for item in sublist):
@@ -51,6 +52,7 @@ class CS:
         for value_list in track(
             dictionary.values(),
             description="Computing Summary Statistics of Sentiment Scores",
+            transient=True
         ):
             unique_labels = set(value_list)
 
@@ -86,6 +88,7 @@ class CS:
         for value in track(
             dictionary.values(),
             description="Computing Summary Statistics of Sentiment Scores",
+            transient=True
         ):
             if value < 0:
                 neg.append(value)
@@ -173,6 +176,7 @@ class CS:
         for key in track(
             lexicon_dictionary.keys(),
             description="Extracting Summary Insights from Sentiment Lexicons",
+            transient=True
         ):
             doc = self.spacy_nlp(key)
             for token in doc:

@@ -19,6 +19,16 @@ class lexicon:
             with open(file_path, 'rb') as handle: 
                 self.lex_dict = pickle.load(handle)
                 
+        elif idx == "AFINN_v2015": 
+            file_path = os.path.join(self.script_dir, 'lexicon_dictionary', 'AFINN', 'AFINN_v2015.pickle')
+            with open(file_path, 'rb') as handle: 
+                self.lex_dict = pickle.load(handle)
+        
+        elif idx == "Aigents+_v2022": 
+            file_path = os.path.join(self.script_dir, 'lexicon_dictionary', 'Aigents', 'Aigents+_v2022.pickle')
+            with open(file_path, 'rb') as handle: 
+                self.lex_dict = pickle.load(handle)
+                
         return self.lex_dict
     
     def overview(self, dictionary:dict): 
