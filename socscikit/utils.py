@@ -5,14 +5,21 @@ from itertools import combinations, chain
 import statistics
 from collections import Counter
 import spacy
+from spacymoji import Emoji
+import re 
 
 
 class CS:
     def __init__(self):
         self.spacy_nlp = spacy.load(
             "en_core_web_sm"
-        )  # could be removed to summarise_lex_dict if not used frequently
+        ).add_pipe("emoji", first=True)
 
+    def extract_emoticons(text):
+        emoticon_pattern = re.compile(r'(?::|;|=)(?:-)?(?:\)|D|P|O|S|\(|\||\\|\/|\[|\]|x|X|<|>|\'|\"|@|3|8|\$|_|{|}|;|\\|\*|,|\.|!|0|_|<|3|>|\^|¯|–|`|\*)[.,!?\'\"]*|[.,!?\'\"]*(?:\)|D|P|O|S|\(|\||\\|\/|\[|\]|x|X|<|>|\'|\"|@|3|8|\$|_|{|}|;|\\|\*|,|\.|!|0|_|<|3|>|\^|¯|–|`|\*)(?:-)?(?::|;|=)')
+        emoticons = re.findall(emoticon_pattern, text)
+        return emoticons
+    
     def count_categorical_labels(self, dictionary):
         label_counts = Counter()
         multi_label_counts = Counter()
@@ -71,7 +78,7 @@ class CS:
                     multi_label_counts[multi_label] = 1
 
         output = {
-            "labels": list(label_counts.keys()),
+            "labels": sorted(list(label_counts.keys())),
             "label frequency": self.sort_dict(label_counts),
             "multi label frequency": self.sort_dict(multi_label_counts),
         }
@@ -168,6 +175,7 @@ class CS:
             "adverbs": 0,
             "prepositions": 0,
             "nouns": 0,
+            "emo": 0,
             "miscellaneous": 0,
         }
         granular_dict = {}
@@ -180,7 +188,14 @@ class CS:
         ):
             doc = self.spacy_nlp(key)
             for token in doc:
-                pos_tags.append(token.tag_)
+                #check if token is emoji 
+                if token._.is_emoji: 
+                    pos_tags.append("EMOJI")
+                #check if token is emoticon 
+                elif token.text in self.extract_emoticons(token.text):
+                    pos_tags.append("EMOTICON")
+                else: 
+                     pos_tags.append(token.tag_)
 
         for element in pos_tags:
             if element in granular_dict:
@@ -199,6 +214,8 @@ class CS:
                 general_dict["prepositions"] += value
             elif key.startswith("N"):
                 general_dict["nouns"] += value
+            elif key.startswith("EMO"):
+                general_dict["emos"] += value 
             else:
                 misc.append(key)
                 general_dict["miscellaneous"] += value

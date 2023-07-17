@@ -31,6 +31,9 @@ class lexicon:
                 
         return self.lex_dict
     
-    def overview(self, dictionary:dict): 
+    def overview(self, dictionary:dict=None): 
         #dict:str = Consider if users simply come up with the lex_dict_idx
-        return CS().summarise_lex_dict(dictionary)
+        if dict is None: 
+            raise ValueError
+        else:
+            return CS().summarise_lex_dict(dictionary)
