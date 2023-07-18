@@ -12,7 +12,10 @@ from socscikit.lexicon_dictionary import emos
 
 class CS:
     def __init__(self):
-        self.spacy_nlp = spacy.load("en_core_web_sm", exclude=["parser", "senter", "attribute_ruler", "lemmatizer", "ner"])
+        self.spacy_nlp = spacy.load(
+            "en_core_web_sm",
+            exclude=["parser", "senter", "attribute_ruler", "lemmatizer", "ner"],
+        )
         self.spacy_nlp.add_pipe("emoji", first=True)
 
     def count_categorical_labels(self, dictionary):
@@ -217,6 +220,11 @@ class CS:
             else:
                 misc.append(key)
                 general_dict["miscellaneous"] += value
+
+        granular_dict = dict(
+            ("{} ({})".format(key, spacy.explain(key)), value)
+            for (key, value) in granular_dict.items()
+        )
 
         part_of_speech = {
             "general": self.sort_dict(general_dict),
