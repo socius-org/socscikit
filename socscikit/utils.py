@@ -14,13 +14,6 @@ class CS:
     def __init__(self):
         self.spacy_nlp = spacy.load("en_core_web_sm").add_pipe("emoji", first=True)
 
-    def extract_emoticons(text):
-        emoticon_pattern = re.compile(
-            r"(?::|;|=)(?:-)?(?:\)|D|P|O|S|\(|\||\\|\/|\[|\]|x|X|<|>|\'|\"|@|3|8|\$|_|{|}|;|\\|\*|,|\.|!|0|_|<|3|>|\^|¯|–|`|\*)[.,!?\'\"]*|[.,!?\'\"]*(?:\)|D|P|O|S|\(|\||\\|\/|\[|\]|x|X|<|>|\'|\"|@|3|8|\$|_|{|}|;|\\|\*|,|\.|!|0|_|<|3|>|\^|¯|–|`|\*)(?:-)?(?::|;|=)"
-        )
-        emoticons = re.findall(emoticon_pattern, text)
-        return emoticons
-
     def count_categorical_labels(self, dictionary):
         label_counts = Counter()
         multi_label_counts = Counter()
@@ -191,10 +184,10 @@ class CS:
             if key in emos.emoticons:
                 pos_tags.append("EMOTICON")
             else:
-                with self.spacy_nlp.select_pipes(
-                    disable=["parser", "senter", "attribute_ruler", "lemmatizer", "ner"]
-                ):
-                    doc = self.spacy_nlp(key)
+                # with self.spacy_nlp.select_pipes(
+                #     disable=["parser", "senter", "attribute_ruler", "lemmatizer", "ner"]
+                # ):
+                doc = self.spacy_nlp(key)
                 for token in doc:
                     # check if token is emoji
                     if token._.is_emoji:
