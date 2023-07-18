@@ -7,7 +7,7 @@ from collections import Counter
 import spacy
 from spacymoji import Emoji
 import re
-from lexicon_dictionary import emos
+from socscikit.lexicon_dictionary import emos
 
 
 class CS:
@@ -184,10 +184,10 @@ class CS:
             if key in emos.emoticons:
                 pos_tags.append("EMOTICON")
             else:
-                # with self.spacy_nlp.select_pipes(
-                #     disable=["parser", "senter", "attribute_ruler", "lemmatizer", "ner"]
-                # ):
-                doc = self.spacy_nlp(key)
+                with self.spacy_nlp.select_pipes(
+                    disable=["parser", "senter", "attribute_ruler", "lemmatizer", "ner"]
+                ):
+                    doc = self.spacy_nlp(key)
                 for token in doc:
                     # check if token is emoji
                     if token._.is_emoji:
