@@ -12,7 +12,8 @@ from socscikit.lexicon_dictionary import emos
 
 class CS:
     def __init__(self):
-        self.spacy_nlp = spacy.load("en_core_web_sm")
+        self.spacy_nlp = spacy.load("en_core_web_sm", exclude=["parser", "senter", "attribute_ruler", "lemmatizer", "ner"])
+        self.spacy_nlp.add_pipe("emoji", first=True)
 
     def count_categorical_labels(self, dictionary):
         label_counts = Counter()
@@ -184,11 +185,7 @@ class CS:
             if key in emos.emoticons:
                 pos_tags.append("EMOTICON")
             else:
-                with self.spacy_nlp.select_pipes(
-                    disable=["parser", "senter", "attribute_ruler", "lemmatizer", "ner"]
-                ):
-                    self.spacy_nlp.add_pipe("emoji", first=True)
-                    doc = self.spacy_nlp(key)
+                doc = self.spacy_nlp(key)
                 for token in doc:
                     # check if token is emoji
                     if token._.is_emoji:
