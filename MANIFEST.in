@@ -2,3 +2,4 @@ recursive-include socscikit/lexicon_dictionary/MASTER MASTER_v2022.pickle MASTER
 recursive-include socscikit/lexicon_dictionary/VADER VADER_v2014_mod.pickle VADER.csv
 include socscikit/lexicon_dictionary/AFINN/AFINN_v2015.pickle
 include socscikit/lexicon_dictionary/Aigents/Aigents+_v2022.pickle
+include socscikit/lexicon_dictionary/emos.py

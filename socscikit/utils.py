@@ -6,20 +6,21 @@ import statistics
 from collections import Counter
 import spacy
 from spacymoji import Emoji
-import re 
+import re
+from lexicon_dictionary import emos
 
 
 class CS:
     def __init__(self):
-        self.spacy_nlp = spacy.load(
-            "en_core_web_sm"
-        ).add_pipe("emoji", first=True)
+        self.spacy_nlp = spacy.load("en_core_web_sm").add_pipe("emoji", first=True)
 
     def extract_emoticons(text):
-        emoticon_pattern = re.compile(r'(?::|;|=)(?:-)?(?:\)|D|P|O|S|\(|\||\\|\/|\[|\]|x|X|<|>|\'|\"|@|3|8|\$|_|{|}|;|\\|\*|,|\.|!|0|_|<|3|>|\^|¯|–|`|\*)[.,!?\'\"]*|[.,!?\'\"]*(?:\)|D|P|O|S|\(|\||\\|\/|\[|\]|x|X|<|>|\'|\"|@|3|8|\$|_|{|}|;|\\|\*|,|\.|!|0|_|<|3|>|\^|¯|–|`|\*)(?:-)?(?::|;|=)')
+        emoticon_pattern = re.compile(
+            r"(?::|;|=)(?:-)?(?:\)|D|P|O|S|\(|\||\\|\/|\[|\]|x|X|<|>|\'|\"|@|3|8|\$|_|{|}|;|\\|\*|,|\.|!|0|_|<|3|>|\^|¯|–|`|\*)[.,!?\'\"]*|[.,!?\'\"]*(?:\)|D|P|O|S|\(|\||\\|\/|\[|\]|x|X|<|>|\'|\"|@|3|8|\$|_|{|}|;|\\|\*|,|\.|!|0|_|<|3|>|\^|¯|–|`|\*)(?:-)?(?::|;|=)"
+        )
         emoticons = re.findall(emoticon_pattern, text)
         return emoticons
-    
+
     def count_categorical_labels(self, dictionary):
         label_counts = Counter()
         multi_label_counts = Counter()
@@ -27,7 +28,7 @@ class CS:
         for sublist in track(
             dictionary.values(),
             description="Computing Summary Statistics of Sentiment Scores",
-            transient=True
+            transient=True,
         ):
             if isinstance(sublist, list):
                 if all(isinstance(item, str) for item in sublist):
@@ -59,7 +60,7 @@ class CS:
         for value_list in track(
             dictionary.values(),
             description="Computing Summary Statistics of Sentiment Scores",
-            transient=True
+            transient=True,
         ):
             unique_labels = set(value_list)
 
@@ -95,7 +96,7 @@ class CS:
         for value in track(
             dictionary.values(),
             description="Computing Summary Statistics of Sentiment Scores",
-            transient=True
+            transient=True,
         ):
             if value < 0:
                 neg.append(value)
@@ -175,7 +176,7 @@ class CS:
             "adverbs": 0,
             "prepositions": 0,
             "nouns": 0,
-            "emo": 0,
+            "emos": 0,
             "miscellaneous": 0,
         }
         granular_dict = {}
@@ -184,18 +185,22 @@ class CS:
         for key in track(
             lexicon_dictionary.keys(),
             description="Extracting Summary Insights from Sentiment Lexicons",
-            transient=True
+            transient=True,
         ):
-            doc = self.spacy_nlp(key)
-            for token in doc:
-                #check if token is emoji 
-                if token._.is_emoji: 
-                    pos_tags.append("EMOJI")
-                #check if token is emoticon 
-                elif token.text in self.extract_emoticons(token.text):
-                    pos_tags.append("EMOTICON")
-                else: 
-                     pos_tags.append(token.tag_)
+            # check if token is emoticons
+            if key in emos.emoticons:
+                pos_tags.append("EMOTICON")
+            else:
+                with self.spacy_nlp.select_pipes(
+                    disable=["parser", "senter", "attribute_ruler", "lemmatizer", "ner"]
+                ):
+                    doc = self.spacy_nlp(key)
+                for token in doc:
+                    # check if token is emoji
+                    if token._.is_emoji:
+                        pos_tags.append("EMOJI")
+                    else:
+                        pos_tags.append(token.tag_)
 
         for element in pos_tags:
             if element in granular_dict:
@@ -214,8 +219,10 @@ class CS:
                 general_dict["prepositions"] += value
             elif key.startswith("N"):
                 general_dict["nouns"] += value
-            elif key.startswith("EMO"):
-                general_dict["emos"] += value 
+            elif key == "EMOTICON":
+                general_dict["emos"] += value
+            elif key == "EMOJI":
+                general_dict["emos"] += value
             else:
                 misc.append(key)
                 general_dict["miscellaneous"] += value
