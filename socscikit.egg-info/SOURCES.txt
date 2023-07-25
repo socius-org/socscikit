@@ -13,10 +13,7 @@ socscikit.egg-info/SOURCES.txt
 socscikit.egg-info/dependency_links.txt
 socscikit.egg-info/requires.txt
 socscikit.egg-info/top_level.txt
-socscikit/lexicon_dictionary/emos.py
-socscikit/lexicon_dictionary/AFINN/AFINN_v2015.pickle
-socscikit/lexicon_dictionary/Aigents/Aigents+_v2022.pickle
-socscikit/lexicon_dictionary/MASTER/MASTER_v2022.csv
-socscikit/lexicon_dictionary/MASTER/MASTER_v2022.pickle
-socscikit/lexicon_dictionary/VADER/VADER.csv
-socscikit/lexicon_dictionary/VADER/VADER_v2014_mod.pickle
+socscikit/dict_arXiv/emos.py
+socscikit/dict_arXiv/MASTER/MASTER_v2022.csv
+socscikit/dict_arXiv/MASTER/MASTER_v2022.pickle
+socscikit/dict_arXiv/VADER/VADER_v2014_mod.pickle

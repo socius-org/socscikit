@@ -54,7 +54,7 @@ class lexicon:
             self.origin_df = pd.read_csv(file_path)
         
         elif idx == "VADER_v2014_mod": 
-            file_path = os.path.join(self.script_dir, 'dict_arXiv', 'VADER', 'VADER_v2014_mod.csv')
+            file_path = os.path.join(self.script_dir, 'dict_arXiv', 'VADER', 'VADER_v2014.csv')
             self.origin_df = pd.read_csv(file_path)
                 
         elif idx == "AFINN_v2015": 

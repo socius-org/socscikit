@@ -7,7 +7,7 @@ from collections import Counter
 import spacy
 from spacymoji import Emoji
 import re
-from socscikit.lexicon_dictionary import emos
+from socscikit.dict_arXiv import emos
 
 
 class CS:
