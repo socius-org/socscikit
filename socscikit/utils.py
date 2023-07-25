@@ -16,6 +16,7 @@ class CS:
             "en_core_web_sm",
             exclude=["parser", "senter", "attribute_ruler", "lemmatizer", "ner"],
         )
+        #self.spacy_nlp.add_pipe("sentencizer")
         self.spacy_nlp.add_pipe("emoji", first=True)
 
     def count_categorical_labels(self, dictionary):
@@ -25,7 +26,7 @@ class CS:
         for sublist in track(
             dictionary.values(),
             description="Computing Summary Statistics of Sentiment Scores",
-            transient=True,
+            # transient=True,
         ):
             if isinstance(sublist, list):
                 if all(isinstance(item, str) for item in sublist):
@@ -57,7 +58,7 @@ class CS:
         for value_list in track(
             dictionary.values(),
             description="Computing Summary Statistics of Sentiment Scores",
-            transient=True,
+            # transient=True,
         ):
             unique_labels = set(value_list)
 
@@ -93,7 +94,7 @@ class CS:
         for value in track(
             dictionary.values(),
             description="Computing Summary Statistics of Sentiment Scores",
-            transient=True,
+            # transient=True,
         ):
             if value < 0:
                 neg.append(value)
@@ -182,7 +183,7 @@ class CS:
         for key in track(
             lexicon_dictionary.keys(),
             description="Extracting Summary Insights from Sentiment Lexicons",
-            transient=True,
+            # transient=True,
         ):
             # check if token is emoticons
             if key in emos.emoticons:

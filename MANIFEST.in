@@ -1,5 +1,5 @@
-recursive-include socscikit/lexicon_dictionary/MASTER MASTER_v2022.pickle MASTER_v2022.csv
-recursive-include socscikit/lexicon_dictionary/VADER VADER_v2014_mod.pickle VADER.csv
-include socscikit/lexicon_dictionary/AFINN/AFINN_v2015.pickle
-include socscikit/lexicon_dictionary/Aigents/Aigents+_v2022.pickle
-include socscikit/lexicon_dictionary/emos.py
+recursive-include socscikit/dict_arXiv/MASTER MASTER_v2022.pickle MASTER_v2022.csv
+recursive-include socscikit/dict_arXiv/VADER VADER_v2014_mod.pickle VADER.csv
+recursive-include socscikit/dict_arXiv/AFINN/AFINN_v2015.pickle AFINN_v2015.csv
+recursive-include socscikit/dict_arXiv/Aigents/Aigents+_v2022.pickle Aigents+_v2022.csv
+include socscikit/dict_arXiv/emos.py
