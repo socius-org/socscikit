@@ -80,7 +80,7 @@ class Experiment:
                 optimizer=config.optimizer, lr=config.learning_rate
             )
 
-            for epoch in track(range(config.epochs), desc="Training Model..."):
+            for epoch in track(range(config.epochs), description="Training Model..."):
                 loss = model.train_epoch(train_loader, criterion, optimizer)
                 val_loss, val_acc = model.validate(val_loader, criterion)
 
