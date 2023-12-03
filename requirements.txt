@@ -1,0 +1,5 @@
+torch == 1.12.1
+torchmetrics == 1.2.0
+numpy == 1.21.5
+rich == 13.4.2
+wandb == 0.16.0

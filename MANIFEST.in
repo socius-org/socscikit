@@ -1,1 +1,2 @@
 recursive-include socscikit *
+recursive-exclude socscikit venv
