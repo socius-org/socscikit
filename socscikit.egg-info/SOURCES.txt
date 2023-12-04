@@ -90,8 +90,12 @@ socscikit/.git/objects/f9/ee4f0f76cded650289fa1ef20cd7dc2e118929
 socscikit/.git/objects/fb/4f98d65e5d41bacf2b6c9dc5fcb0410343b6b5
 socscikit/.git/refs/heads/main
 socscikit/.git/refs/remotes/origin/main
+socscikit/__pycache__/__init__.cpython-39.pyc
 socscikit/models/__init__.py
 socscikit/models/core.py
 socscikit/models/linear.py
+socscikit/models/__pycache__/__init__.cpython-39.pyc
+socscikit/models/__pycache__/core.cpython-39.pyc
+socscikit/models/__pycache__/linear.cpython-39.pyc
 socscikit/utils/__init__.py
 socscikit/utils/experiment.py

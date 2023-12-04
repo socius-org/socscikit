@@ -1,2 +1,3 @@
 recursive-include socscikit *
 recursive-exclude socscikit venv
+recursive-exclude socscikit build

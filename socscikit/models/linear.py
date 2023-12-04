@@ -232,7 +232,7 @@ class Classification(nn.Module):
         criterion = self.criterion
         optimizer = self.build_optimizer(optimizer=optimizer, lr=lr)
 
-        for epoch in track(range(epochs), description="Training Model..."):
+        for epoch in track(range(epochs), description="Training Classification Model..."):
             loss = self.train_epoch(train_loader, criterion, optimizer)
             val_loss, val_acc = self.validate(val_loader, criterion)
 

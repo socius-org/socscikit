@@ -3,10 +3,10 @@ Name: socscikit
 Version: 0.0.6.3
 Summary: TYPE YOUR DESCRIPTION HERE
 Home-page: https://github.com/socius-org/socscikit
-Download-URL: https://github.com/socius-org/socscikit/archive/refs/tags/0.0.6.3.tar.gz
 Author: Nick S.H Oh
 Author-email: nick.sh.oh@socialscience.ai
 License: Apache-2.0
+Download-URL: https://github.com/socius-org/socscikit/archive/refs/tags/0.0.6.3.tar.gz
 Keywords: AI,SOCIAL SCIENCE
 Platform: UNKNOWN
 License-File: LICENSE.txt
