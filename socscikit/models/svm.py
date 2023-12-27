@@ -45,8 +45,6 @@ class SVM():
         """
         self.clf = SVC(decision_function_shape='ovo')
         
-    
-        
     def fit(self):
         """
         Fits the SVM classifier to the training data.

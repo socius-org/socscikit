@@ -1,0 +1,18 @@
+# Table of contents
+
+format: jb-book
+root: intro
+parts: 
+  - caption: Machine Learning
+    chapters: 
+    - file: soscikit/Introduction
+    - file: soscikit/Getting_Started
+    - file: soscikit/Archive
+      sections: 
+      - file: soscikit/SVM
+      - file: soscikit/Random Forest
+    - file: soscikit/Contributions
+
+
+
+
